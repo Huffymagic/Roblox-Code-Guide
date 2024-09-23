@@ -1,0 +1,191 @@
+﻿AI NPC pathfinding: 
+local PathfindingService = game:GetService("PathfindingService")
+local npc = script.Parent
+local destination = workspace.Target -- Target can be the player's position
+local humanoid = npc.Humanoid
+
+
+local function moveToTarget()
+    local path = PathfindingService:CreatePath({
+        AgentRadius = 2,
+        AgentHeight = 5,
+        AgentCanJump = true,
+        AgentJumpHeight = 
+
+
+Spawning and showcasing car examples in Roblox: 
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
+local Workspace = game:GetService("Workspace")
+
+
+-- Assuming "CarModel" is stored in ReplicatedStorage
+local carModelTemplate = ReplicatedStorage:WaitForChild("CarModel")
+
+
+-- Spawn car at a certain position
+local function spawnCarModel(position)
+    local carModel = carModelTemplate:Clone()
+    carModel.Parent = Workspace
+    carModel:SetPrimaryPartCFrame(CFrame.new(position))
+
+
+    -- Scale or modify appearance if needed
+    carModel:SetPrimaryPartCFrame(CFrame.new(position) * CFrame.Angles(0, math.rad(90), 0)) -- Start with a rotation
+
+
+    return carModel
+end
+
+
+-- Rotating animation using TweenService
+local function rotateModel(model)
+    local primaryPart = model.PrimaryPart
+    local tweenInfo = TweenInfo.new(5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1, true) -- Continuous rotation
+
+
+    local goalCFrame = {CFrame = primaryPart.CFrame * CFrame.Angles(0, math.rad(360), 0)} -- Rotate 360 degrees
+
+
+    local tween = TweenService:Create(primaryPart, tweenInfo, goalCFrame)
+    tween:Play()
+end
+
+
+-- Main execution
+local carPosition = Vector3.new(0, 5, 0) -- Position to spawn the car
+local carModel = spawnCarModel(carPosition)
+rotateModel(carModel)
+
+
+
+
+
+
+Draft of 0 Gravity when command input “;gravity” is used: 
+local Players = game:GetService("Players")
+local Workspace = game:GetService("Workspace")
+local ChatService = game:GetService("Chat")
+
+
+local DEFAULT_GRAVITY = 196.2 -- Roblox's default gravity
+local ZERO_GRAVITY = 0 -- Zero gravity
+
+
+-- Function to handle chat messages
+local function onPlayerChatted(player, message)
+    -- Check if the player typed the command ";gravity"
+    if message:lower() == ";gravity" then
+        -- Set gravity to zero
+        Workspace.Gravity = ZERO_GRAVITY
+        print("Zero gravity activated for 3 seconds!")
+
+
+        -- Send a message to all players notifying them
+        ChatService:Chat(player.Character.Head, "Zero gravity for 3 seconds!", Enum.ChatColor.Blue)
+
+
+        -- Wait for 3 seconds
+        wait(3)
+
+
+        -- Restore default gravity
+        Workspace.Gravity = DEFAULT_GRAVITY
+        print("Gravity restored to normal.")
+    end
+end
+
+
+-- Connect chat detection to each player
+Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+
+
+Potential ;bringmeto [player name] command: 
+local Players = game:GetService("Players")
+
+
+-- Function to handle chat messages
+local function onPlayerChatted(player, message)
+    -- Check if the message starts with ";bringmeto"
+    if message:lower():sub(1, 11) == ";bringmeto " then
+        -- Get the target player's name
+        local targetPlayerName = message:sub(12) -- Get everything after ";bringmeto "
+
+
+        -- Find the target player by name
+        local targetPlayer = Players:FindFirstChild(targetPlayerName)
+
+
+        if targetPlayer then
+            -- Ensure the target player and the requesting player have characters
+            if targetPlayer.Character and player.Character then
+                -- Get the requesting player's position
+                local destinationPosition = player.Character.HumanoidRootPart.Position
+                
+                -- Teleport the target player to the requesting player
+                targetPlayer.Character:SetPrimaryPartCFrame(CFrame.new(destinationPosition))
+                
+                -- Notify the requesting player
+                player:Kick("You successfully brought " .. targetPlayerName .. " to you!")
+            else
+                player:Kick("Failed to bring " target model failureLOG
+
+
+
+
+Tracking Players within in game with marker 🧷: 
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+
+-- Create the exclamation mark as a BillboardGui
+local function createExclamationMark()
+    local billboard = Instance.new("BillboardGui")
+    billboard.Size = UDim2.new(2, 0, 2, 0)
+    billboard.StudsOffset = Vector3.new(0, 3, 0) -- Offset the GUI above the head
+    billboard.AlwaysOnTop = true
+
+
+    local exclamationLabel = Instance.new("TextLabel")
+    exclamationLabel.Size = UDim2.new(1, 0, 1, 0)
+    exclamationLabel.BackgroundTransparency = 1
+    exclamationLabel.Text = "!"
+    exclamationLabel.TextScaled = true
+    exclamationLabel.TextColor3 = Color3.fromRGB(255, 0, 0) -- Red exclamation point
+    exclamationLabel.Font = Enum.Font.SourceSansBold
+
+
+    exclamationLabel.Parent = billboard
+    return billboard
+end
+
+
+-- Handle the ;pin command
+local function onPlayerChatted(player, message)
+    -- Check if the message starts with ";pin"
+    if message:lower():sub(1, 5) == ";pin " then
+        local targetPlayerName = message:sub(6) -- Extract player name after ";pin "
+
+
+        -- Find the target player by name
+        local targetPlayer = Players:FindFirstChild(targetPlayerName)
+
+
+        if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Head") then
+            -- Create and attach the exclamation mark to the target player's head
+            local exclamationMark = createExclamationMark()
+            exclamationMark.Parent = targetPlayer.Character.Head
+
+
+            -- Optional: Notify the player who issued the command
+            player:Kick("You have successfully pinned " .. targetPlayerName .. ".")
+        else
+            -- Optional: Notify the player that the target was not found
+            player:Kick("Player not found or target is not valid.")
+        end
+    end
+end
